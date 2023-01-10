@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\LimitStream;
 use GuzzleHttp\Psr7\Request;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Http\GraphResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Uploader for Ms Graph Model
@@ -138,13 +140,13 @@ class Uploader
      * Create a stream and add validation
      *
      * @param string $filename Filename
-     * @return bool
+     * @return StreamInterface
      */
     protected function createStream($filename)
     {
-        $stream = Psr7\stream_for(fopen($filename, 'r+'));
+        $stream = Psr7\Utils::streamFor(fopen($filename, 'r+'));
         if ($stream->getSize() >= self::UPLOAD_LIMIT) {
-            throw new \yii\base\NotSupportedException("Tidak boleh lebih dari 60mb!", 400);
+            throw new \OutOfRangeException("Tidak boleh lebih dari 60mb!", 400);
         }
         return $stream;
     }
@@ -155,7 +157,7 @@ class Uploader
      * @param string $uploadUrl Upload URL
      * @param array $headers Array of Headers
      * @param StreamInterface $stream The Stream
-     * @return bool
+     * @return ResponseInterface
      */
     protected function sendRequest($uploadUrl, $headers, $stream)
     {
