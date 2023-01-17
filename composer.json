@@ -5,7 +5,8 @@
     "type": "library",
     "require": {
         "php": ">= 7.4",
-        "microsoft/microsoft-graph": "^1.85.0"
+        "microsoft/microsoft-graph": "^1.85.0",
+        "vlucas/phpdotenv": "^5.5"
     },
     "license": "MIT",
     "authors": [
