@@ -17,7 +17,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "pkpudev\\graph\\": "src/"
+            "pkpudev\\graph\\": "src/",
+            "tests\\": "tests/"
         }
     },
     "require-dev": {

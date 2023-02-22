@@ -3,29 +3,40 @@
 namespace pkpudev\graph;
 
 use Microsoft\Graph\Model\Team;
+use Microsoft\Graph\Model\User;
 
 trait TeamsTrait
 {
     /**
      * Get Microsoft 365 Teams
+     * Query $top and $search unsupported
      *
      * @param string $userId User ID
-     * @param string $name Search term
-     * @param int $limit Search Limit, Default to 10
      * @return Team[] List of Teams
      */
-    public function getTeams($userId, $search = null, $limit = 10)
+    public function getTeams($userId)
     {
-        $url = sprintf('/users/%s/joinedTeams?$top=%s', $userId, $limit);
-        if ($search) {
-            $url = sprintf('/users/%s/joinedTeams?$top=%s&$search=\"displayName:%s\"', $userId, $limit, $search);
-        }
-
         $teams = $this->graph
-            ->createRequest("GET", $url)
+            ->createRequest("GET", sprintf('/users/%s/joinedTeams', $userId))
             ->addHeaders(['ConsistencyLevel' => 'eventual'])
             ->setReturnType(Team::class)
             ->execute();
         return $teams;
+    }
+
+    /**
+     * Get Microsoft 365 Teams
+     * Query $top and $search unsupported
+     *
+     * @param string $userId User ID
+     * @return Team[] List of Teams
+     */
+    public function getTeamMembers($teamId, $limit = 10)
+    {
+        $users = $this->graph
+            ->createRequest("GET", sprintf('/groups/%s/members?$top=%s', $teamId, $limit))
+            ->setReturnType(User::class)
+            ->execute();
+        return $users;
     }
 }

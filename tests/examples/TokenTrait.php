@@ -11,9 +11,9 @@ trait TokenTrait
         // TODO: add cache
 
         $accessToken = new AccessToken(
-            getenv('TENANT_ID'),
-            getenv('CLIENT_ID'),
-            getenv('CLIENT_SECRET')
+            $_ENV['TENANT_ID'],
+            $_ENV['CLIENT_ID'],
+            $_ENV['CLIENT_SECRET']
         );
 
         return $accessToken->generate();
